@@ -76,7 +76,7 @@ void shell()
 			status = searchBuiltInCommand(temp);
 			if (status != -1){
 				int in = dup(STDIN_FILENO), out = dup(STDOUT_FILENO);
-				if( in == -1 | out == -1)
+				if( in == -1 || out == -1)
 					perror("dup");
 				redirection(temp);
 				status = execBuiltInCommand(status,temp);
