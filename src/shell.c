@@ -125,6 +125,46 @@ int spawn_proc(struct cmd_node *p)
  */
 int fork_cmd_node(struct cmd *cmd)
 {
+	int pipefd[2];
+	int last_read = -1;	// init last_read to -1
+	int *cpids = (int *)malloc(sizeof(int) * cmd->pipe_num);
+	// loop through cmd_node
+	int i = 0;
+	for(struct cmd_node *temp = cmd->head; temp != NULL; temp = temp->next)
+	{
+		// if node is not first node, set in to pipefd[0]
+		if(temp != cmd->head)
+		{
+			// printf("%s form pipe in\n", temp->args[0]);
+			temp->in = pipefd[0];	// pipefd[0] is read end
+			last_read = pipefd[0];
+		}
+		if(temp->next != NULL)
+		{
+			if(pipe(pipefd) == -1)
+			{
+				perror("pipe");
+				exit(1);
+			}
+			temp->out = pipefd[1];	// pipefd[1] is write end
+		}
+		cpids[i] = spawn_proc(temp);
+		if(temp->next != NULL)
+		{
+			close(pipefd[1]);
+		}
+		if(last_read != -1)
+		{
+			close(last_read);
+		}
+		i += 1;
+	}
+	// wait for all child processes
+	for(int j = 0; j < i; j++)
+	{
+		waitpid(cpids[j], NULL, 0);
+	}
+	free(cpids);
 	return 1;
 }
 // ===============================================================
@@ -173,7 +213,10 @@ void shell()
 		}
 		// There are multiple commands ( | )
 		else{
-			
+			// for(struct cmd_node *temp = cmd->head; temp != NULL; temp = temp->next)
+			// {
+			// 	printf("args: %s, out: %d\n", temp->args[0], temp->out);
+			// }
 			status = fork_cmd_node(cmd);
 		}
 		// free space

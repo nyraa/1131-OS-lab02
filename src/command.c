@@ -66,6 +66,10 @@ struct cmd *split_line(char *line)
 			for (int i = 0; i < args_length; ++i)
 				new_pipe->args[i] = NULL;
 			new_pipe->length = 0;
+			new_pipe->in_file = NULL;
+			new_pipe->out_file = NULL;
+			new_pipe->in = STDIN_FILENO;
+			new_pipe->out = STDOUT_FILENO;
 			new_pipe->next = NULL;
 			temp->next = new_pipe;
 			temp = new_pipe;
