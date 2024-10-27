@@ -37,6 +37,56 @@ void redirection(struct cmd_node *p){
  */
 int spawn_proc(struct cmd_node *p)
 {
+	pid_t cpid = fork();
+	switch(cpid)
+	{
+		case -1:
+			perror("fork");
+			return 0;
+		case 0:
+			// child process
+			if(p->in_file)
+			{
+				int fd = open(p->in_file, O_RDONLY);
+				if(fd == -1)
+				{
+					perror("open");
+					exit(1);
+				}
+				dup2(fd, 0);
+				close(fd);
+			}
+			if(p->out_file)
+			{
+				int fd = open(p->out_file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+				if(fd == -1)
+				{
+					perror("open");
+					exit(1);
+				}
+				dup2(fd, 1);
+				close(fd);
+			}
+			if(p->in != 0)
+			{
+				dup2(p->in, 0);
+				close(p->in);
+			}
+			if(p->out != 1)
+			{
+				dup2(p->out, 1);
+				close(p->out);
+			}
+			if(execvp(p->args[0], p->args) == -1)
+			{
+				perror("execvp");
+				return 0;
+			}
+			break;
+		default:
+			// parent process
+			return cpid;
+	}
   	return 1;
 }
 // ===============================================================
@@ -92,6 +142,7 @@ void shell()
 			else{
 				//external command
 				status = spawn_proc(cmd->head);
+				waitpid(status, NULL, 0);
 			}
 		}
 		// There are multiple commands ( | )
