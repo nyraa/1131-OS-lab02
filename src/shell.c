@@ -9,6 +9,8 @@
 #include "../include/command.h"
 #include "../include/builtin.h"
 
+#define PROMPT ">>> \xE0\xB6\x9E "
+
 // ======================= requirement 2.3 =======================
 /**
  * @brief 
@@ -179,7 +181,7 @@ int fork_cmd_node(struct cmd *cmd)
 void shell()
 {
 	while (1) {
-		printf(">>> $ ");
+		printf(PROMPT);
 		char *buffer = read_line();
 		if (buffer == NULL)
 			continue;
