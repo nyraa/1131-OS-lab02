@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
+#include <unistd.h>
 #include "../include/command.h"
 
 /**
@@ -55,8 +56,8 @@ struct cmd *split_line(char *line)
 	struct cmd_node *temp = new_cmd->head;
 	temp->in_file 	= NULL;
 	temp->out_file 	= NULL;
-	temp->in       	= 0;
-	temp->out 		= 1;
+	temp->in       	= STDIN_FILENO;
+	temp->out 		= STDOUT_FILENO;
     char *token = strtok(line, " ");
     while (token != NULL) {
         if (token[0] == '|') {

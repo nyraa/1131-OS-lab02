@@ -53,7 +53,7 @@ int spawn_proc(struct cmd_node *p)
 					perror("open");
 					exit(1);
 				}
-				dup2(fd, 0);
+				dup2(fd, STDIN_FILENO);
 				close(fd);
 			}
 			if(p->out_file)
@@ -64,17 +64,17 @@ int spawn_proc(struct cmd_node *p)
 					perror("open");
 					exit(1);
 				}
-				dup2(fd, 1);
+				dup2(fd, STDOUT_FILENO);
 				close(fd);
 			}
-			if(p->in != 0)
+			if(p->in != STDIN_FILENO)
 			{
-				dup2(p->in, 0);
+				dup2(p->in, STDIN_FILENO);
 				close(p->in);
 			}
-			if(p->out != 1)
+			if(p->out != STDOUT_FILENO)
 			{
-				dup2(p->out, 1);
+				dup2(p->out, STDOUT_FILENO);
 				close(p->out);
 			}
 			if(execvp(p->args[0], p->args) == -1)
@@ -132,9 +132,13 @@ void shell()
 				status = execBuiltInCommand(status,temp);
 
 				// recover shell stdin and stdout
-				if (temp->in_file)  dup2(in, 0);
-				if (temp->out_file){
-					dup2(out, 1);
+				if (temp->in_file)
+				{
+					dup2(in, STDIN_FILENO);
+				}
+				if (temp->out_file)
+				{
+					dup2(out, STDOUT_FILENO);
 				}
 				close(in);
 				close(out);
