@@ -1,10 +1,10 @@
 TARGET 	= sush
 CC     	= gcc
 FLAGS  	= -Wall
-OBJ    	= builtin.o command.o shell.o
+BIN		= ./bin/
+OBJ    	= $(BIN)builtin.o $(BIN)command.o $(BIN)shell.o
 INCLUDE = ./include/
 SRC		= ./src/
-BIN		= ./bin/
 
 # Ensure the bin directory exists
 $(shell mkdir -p $(BIN))
