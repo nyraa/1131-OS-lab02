@@ -81,7 +81,6 @@ struct cmd *split_line(char *line)
             temp->out_file = token;
         } else {
 			temp->args[temp->length] = token;
-			temp->args[temp->length + 1] = NULL;
 			temp->length++;
         }
         token = strtok(NULL, " ");
