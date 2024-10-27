@@ -55,7 +55,15 @@ int help(char **args)
 // ======================= requirement 2.1 =======================
 int cd(char **args)
 {
-	return 1;
+	if(chdir(args[1]) == 0)
+	{
+		return 1;
+	}
+	else
+	{
+		perror("cd");
+	}
+	return 0;
 }
 // ===============================================================
 

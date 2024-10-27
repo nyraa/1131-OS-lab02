@@ -12,10 +12,10 @@ $(shell mkdir -p $(BIN))
 all: $(TARGET) 
 
 $(TARGET): my_shell.c $(OBJ) 
-	$(CC) $(FLAGS) -o $(TARGET) $(addprefix ${BIN}, $(OBJ)) $<
+	$(CC) $(FLAGS) -o $(TARGET) $(OBJ) $<
 
-%.o: ${SRC}%.c ${INCLUDE}%.h
-	$(CC) $(FLAGS) -c $< -o ${BIN}$@
+$(BIN)%.o: ${SRC}%.c ${INCLUDE}%.h
+	$(CC) $(FLAGS) -c $< -o $@
 
 .PHONY: clean
 clean:
