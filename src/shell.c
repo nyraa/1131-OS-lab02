@@ -132,7 +132,7 @@ int fork_cmd_node(struct cmd *cmd)
 	int i = 0;
 	for(struct cmd_node *temp = cmd->head; temp != NULL; temp = temp->next)
 	{
-		// if node is not first node, set in to pipefd[0]
+		// STEP 1: if node is not first node, set in to pipefd[0] (previous pipe read end)
 		if(temp != cmd->head)
 		{
 			// printf("%s form pipe in\n", temp->args[0]);
@@ -140,7 +140,7 @@ int fork_cmd_node(struct cmd *cmd)
 			last_read = pipefd[0];	// tmp for previous pipe read end, should close after fork, but before fork new pipe creates, so store it
 		}
 
-		// if next exists, create pipe
+		// STEP 2: if next exists, create pipe
 		if(temp->next != NULL)
 		{
 			if(pipe(pipefd) == -1)
@@ -150,6 +150,8 @@ int fork_cmd_node(struct cmd *cmd)
 			}
 			temp->out = pipefd[1];	// pipefd[1] is write end
 		}
+
+		// STEP 3: fork process
 		cpids[i] = spawn_proc(temp);
 		// close pipefd[1] if not last node
 		if(temp->next != NULL)
