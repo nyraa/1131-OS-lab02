@@ -69,28 +69,7 @@ int spawn_proc(struct cmd_node *p)
 			return 0;
 		case 0:
 			// child process
-			if(p->in_file)
-			{
-				int fd = open(p->in_file, O_RDONLY);
-				if(fd == -1)
-				{
-					perror("open");
-					exit(1);
-				}
-				dup2(fd, STDIN_FILENO);
-				close(fd);
-			}
-			if(p->out_file)
-			{
-				int fd = open(p->out_file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-				if(fd == -1)
-				{
-					perror("open");
-					exit(1);
-				}
-				dup2(fd, STDOUT_FILENO);
-				close(fd);
-			}
+			redirection(p);
 			if(p->in != STDIN_FILENO)
 			{
 				dup2(p->in, STDIN_FILENO);
