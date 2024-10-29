@@ -73,6 +73,7 @@ struct cmd *split_line(char *line)
 			new_pipe->next = NULL;
 			temp->next = new_pipe;
 			temp = new_pipe;
+			new_cmd->pipe_num++;
         } else if (token[0] == '<') {
 			token = strtok(NULL, " ");
             temp->in_file = token;
@@ -84,8 +85,6 @@ struct cmd *split_line(char *line)
 			temp->length++;
         }
         token = strtok(NULL, " ");
-		new_cmd->pipe_num++;
-
     }
 
     return new_cmd;
