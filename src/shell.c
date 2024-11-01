@@ -9,7 +9,11 @@
 #include "../include/command.h"
 #include "../include/builtin.h"
 
+#ifdef sush
 #define PROMPT ">>> \xE0\xB6\x9E "
+#else
+#define PROMPT ">>> $ "
+#endif
 
 // ======================= requirement 2.3 =======================
 /**

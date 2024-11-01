@@ -8,6 +8,7 @@
 #include <fcntl.h>
 #include "../include/builtin.h"
 
+#ifdef sush
 #define AMOGUS "\xE0\xB6\x9E "
 #define AMOGUS_ASCII_ART "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⣤⣤⣤⣤⣤⣶⣦⣤⣄⡀⠀⠀⠀⠀⠀⠀⠀⠀\n"\
 "⠀⠀⠀⠀⠀⠀⠀⠀⢀⣴⣿⡿⠛⠉⠙⠛⠛⠛⠛⠻⢿⣿⣷⣤⡀⠀⠀⠀⠀⠀\n"\
@@ -28,6 +29,8 @@
 "⠀⠀⠀⠀⠀⠀⠀⣿⣿⠀⠀⠀⠀⠀⣿⣿⡇⠀⢹⣿⡆⠀⠀⠀⣸⣿⠇⠀⠀⠀  \t░  ░  ░   ░░░ ░ ░ ░  ░  ░   ░  ░░ ░\n"\
 "⠀⠀⠀⠀⠀⠀⠀⢿⣿⣦⣄⣀⣠⣴⣿⣿⠁⠀⠈⠻⣿⣿⣿⣿⡿⠏⠀⠀⠀⠀   \t░     ░           ░   ░  ░  ░\n"\
 "⠀⠀⠀⠀⠀⠀⠀⠈⠛⠻⠿⠿⠿⠿⠋⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀\n"\
+
+#endif
 
 /**
  * @brief 
@@ -63,7 +66,11 @@ int help(char **args)
 {
 	int i;
     printf("--------------------------------------------------\n");
+	#ifdef sush
   	printf(AMOGUS AMOGUS AMOGUS "My suspicious shell" AMOGUS AMOGUS AMOGUS "\n");
+	#else
+  	printf("My Little Shell!!\n");
+	#endif
 	printf("The following are built in:\n");
 	for (i = 0; i < num_builtins(); i++) {
     	printf("%d: %s\n", i, builtin_str[i]);
@@ -132,11 +139,13 @@ int record(char **args)
 	return 1;
 }
 
+#ifdef sush
 int amogus(char **args)
 {
 	printf(AMOGUS_ASCII_ART);
 	return 1;
 }
+#endif
 
 const char *builtin_str[] = {
  	"help",
@@ -145,7 +154,9 @@ const char *builtin_str[] = {
 	"echo",
  	"exit",
  	"record",
+	#ifdef sush
 	"amogus",
+	#endif
 };
 
 const int (*builtin_func[]) (char **) = {
@@ -155,7 +166,9 @@ const int (*builtin_func[]) (char **) = {
 	&echo,
 	&exit_shell,
   	&record,
+	#ifdef sush
 	&amogus,
+	#endif
 };
 
 int num_builtins() {
