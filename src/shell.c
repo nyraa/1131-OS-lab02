@@ -87,7 +87,7 @@ int spawn_proc(struct cmd_node *p)
 			if(execvp(p->args[0], p->args) == -1)
 			{
 				perror("execvp");
-				return 0;
+				exit(1);
 			}
 			break;
 		default:
