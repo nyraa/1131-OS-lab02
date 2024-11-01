@@ -81,6 +81,11 @@ int help(char **args)
 // ======================= requirement 2.1 =======================
 int cd(char **args)
 {
+	if(args[1] == NULL)
+	{
+		printf("cd: missing argument\n");
+		return 1;
+	}
 	if(chdir(args[1]) == 0)
 	{
 		return 1;
